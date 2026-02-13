@@ -11,7 +11,6 @@ export default function Home() {
 
   const [laserMode, setLaserMode] = useState(false);
   const [laserTargetIndex, setLaserTargetIndex] = useState(null);
-
   const [currentIndex, setCurrentIndex] = useState(profiles.length - 1);
 
   const childRefs = useRef(
@@ -22,13 +21,11 @@ export default function Home() {
 
   const handleSwipe = (dir, profile, index) => {
 
-    // SUCCESS CARD
     if (profile.isYou && dir === "right") {
       router.push("/success");
       return;
     }
 
-    // WRONG RIGHT SWIPE
     if (!profile.isYou && dir === "right") {
       setLaserTargetIndex(index);
       setLaserMode(true);
@@ -41,7 +38,6 @@ export default function Home() {
       return;
     }
 
-    // NORMAL LEFT SWIPE
     setCurrentIndex(index - 1);
   };
 
@@ -65,32 +61,37 @@ export default function Home() {
   }, [currentIndex]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-lovePeach overflow-hidden">
+    <motion.div
+      animate={laserMode ? { x: [-6, 6, -6, 6, 0] } : {}}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col items-center justify-center h-screen bg-lovePeach overflow-hidden"
+    >
 
       <h1 className="text-3xl font-bold mb-6 text-loveTeal">
         Find Your Forever Partner 💘
       </h1>
 
-      {/* ⭐ LASER OVERLAY */}
+      {/* CARTOON EXPLOSION OVERLAY */}
       {laserMode && (
         <div className="fixed inset-0 flex flex-col items-center justify-start pointer-events-none z-50">
 
-          {/* FACE DROP */}
           <motion.img
             src="/you.jpg"
             className="w-24 h-24 rounded-full mt-6 shadow-lg"
-            initial={{ y: -200 }}
-            animate={{ y: 0 }}
+            initial={{ y: -200, rotate: 180 }}
+            animate={{ y: 0, rotate: 180 }}
             transition={{ type: "spring", stiffness: 200 }}
           />
 
-          {/* LASER BEAM */}
           <motion.div
-            className="w-2 bg-red-400 rounded-full"
-            initial={{ height: 0 }}
-            animate={{ height: "60vh" }}
-            transition={{ duration: 0.3 }}
-          />
+            className="text-6xl mt-4"
+            initial={{ scale: 0 }}
+            animate={{ scale: [0, 1.4, 1] }}
+            transition={{ duration: 0.4 }}
+          >
+            💥✨💖
+          </motion.div>
+
         </div>
       )}
 
@@ -109,10 +110,14 @@ export default function Home() {
             <motion.div
               animate={
                 laserMode && laserTargetIndex === index
-                  ? { scale: 0.5, rotate: 25, opacity: 0 }
+                  ? {
+                      scale: [1, 1.05, 0.95, 1.05, 0],
+                      rotate: [0, -6, 6, -6, 25],
+                      opacity: [1, 1, 1, 1, 0]
+                    }
                   : { scale: 1, rotate: 0, opacity: 1 }
               }
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.6 }}
               className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
             >
 
@@ -152,6 +157,6 @@ export default function Home() {
 
       </div>
 
-    </div>
+    </motion.div>
   );
 }
