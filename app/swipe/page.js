@@ -149,7 +149,12 @@ export default function Home() {
 
       <div className="relative w-[90vw] max-w-sm aspect-[3/4]">
 
-        {[...profiles].reverse().map((profile, index) => (
+        {[...profiles].reverse().map((profile, index) => {
+
+          const isActive = index === currentIndex;
+          const isNext = index === currentIndex - 1;
+
+          return (
 
           <TinderCard
             ref={childRefs.current[index]}
@@ -164,31 +169,43 @@ export default function Home() {
           >
 
             <motion.div
-              animate={
-                laserMode && laserTargetIndex === index
-                  ? {
-                      scale: [1, 1.2, 0.4],
-                      rotate: [0, -20, 45],
-                      opacity: [1, 1, 0]
-                    }
+  animate={
+    laserMode && laserTargetIndex === index
+      ? {
+          scale: [1, 1.2, 0.4],
+          rotate: [0, -20, 45],
+          opacity: [1, 1, 0]
+        }
 
-                  : snapBack && profile.isYou
-                  ? {
-                      x: [-120, 60, -30, 15, 0],
-                      rotate: [-12, 6, -3, 2, 0]
-                    }
+      : snapBack && profile.isYou
+      ? {
+          x: [-120, 60, -30, 15, 0],
+          rotate: [-12, 6, -3, 2, 0]
+        }
 
-                  : { scale: 1, rotate: 0, opacity: 1 }
-              }
+      : {
+          scale: isActive ? 1 : 0.92,   // ⭐ PREMIUM DEPTH ZOOM
+          filter: isActive
+            ? "blur(0px)"
+            : isNext
+            ? "blur(6px)"               // ⭐ SOFT NEXT CARD BLUR
+            : "blur(12px)",             // ⭐ HIDE STACK CARDS
 
-              transition={{
-                duration: 0.5,
-                type: "spring",
-                stiffness: 250
-              }}
+          opacity: isActive
+            ? 1
+            : isNext
+            ? 0.6
+            : 0.2
+        }
+  }
 
-              className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
-            >
+  transition={{
+    duration: 0.8,                     // ⭐ EXTRA DRAMA FADE SPEED
+    ease: "easeOut"
+  }}
+
+  className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
+>
 
               <img
                 src={profile.image}
@@ -203,8 +220,9 @@ export default function Home() {
             </motion.div>
 
           </TinderCard>
+            );
+            })}
 
-        ))}
 
       </div>
 
