@@ -116,14 +116,13 @@ export default function Success() {
 
       {/* 🌹 FINAL MESSAGE */}
       <motion.h2
-  initial={{ opacity: 0, scale: 0.6, y: 60 }}
-  animate={{ opacity: 1, scale: 1, y: 0 }}
-  transition={{ delay: 2.3, type: "spring", stiffness: 120 }}
-  className="text-6xl md:text-7xl mt-12 font-extrabold text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.9)] tracking-wide text-center"
->
-  Happy Valentine’s Day 🌹
-</motion.h2>
-
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.3 }}
+        className="text-3xl mt-10 font-semibold drop-shadow-lg"
+      >
+        Happy Valentine’s Day 🌹
+      </motion.h2>
 
     </div>
   );
