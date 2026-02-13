@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 
 export default function Success() {
 
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [screen, setScreen] = useState({
+    width: 0,
+    height: 0
+  });
 
-  // Get screen size for confetti
+  // ⭐ SAFE window access
   useEffect(() => {
-    setSize({
+    setScreen({
       width: window.innerWidth,
       height: window.innerHeight
     });
@@ -20,60 +23,64 @@ export default function Success() {
     <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-gradient-to-br from-lovePink via-lovePeach to-loveGold text-white text-center p-6">
 
       {/* 🎉 CONFETTI */}
-      <Confetti
-        width={size.width}
-        height={size.height}
-        numberOfPieces={350}
-        recycle={true}
-        gravity={0.15}
-      />
+      {screen.width > 0 && (
+        <Confetti
+          width={screen.width}
+          height={screen.height}
+          numberOfPieces={200}
+          recycle={true}
+          gravity={0.15}
+        />
+      )}
 
       {/* ❤️ HEART RAIN */}
-      {[...Array(25)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-3xl"
-          initial={{
-            y: -100,
-            x: Math.random() * window.innerWidth
-          }}
-          animate={{
-            y: window.innerHeight + 100
-          }}
-          transition={{
-            duration: 4 + Math.random() * 3,
-            repeat: Infinity,
-            delay: Math.random() * 2
-          }}
-        >
-          💖
-        </motion.div>
-      ))}
+      {screen.width > 0 &&
+        [...Array(25)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-3xl"
+            initial={{
+              y: -100,
+              x: Math.random() * screen.width
+            }}
+            animate={{
+              y: screen.height + 100
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random()
+            }}
+          >
+            💖
+          </motion.div>
+        ))}
 
       {/* ✨ SPARKLES */}
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-xl"
-          initial={{
-            opacity: 0,
-            scale: 0,
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1.4, 0]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            delay: Math.random() * 2
-          }}
-        >
-          ✨
-        </motion.div>
-      ))}
+      {screen.width > 0 &&
+        [...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-xl"
+            initial={{
+              opacity: 0,
+              scale: 0,
+              x: Math.random() * screen.width,
+              y: Math.random() * screen.height
+            }}
+            animate={{
+              opacity: [0, 1, 0],
+              scale: [0, 1.4, 0]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: Math.random() * 2
+            }}
+          >
+            ✨
+          </motion.div>
+        ))}
 
       {/* 🌟 YOUR PHOTO */}
       <motion.img
