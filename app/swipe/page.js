@@ -63,19 +63,6 @@ export default function Home() {
     setCurrentIndex(index - 1);
   };
 
-  // ================= BUTTON SWIPE =================
-
-  const swipe = async (dir) => {
-
-    if (currentIndex >= 0) {
-      const cardRef = childRefs.current[currentIndex];
-
-      if (cardRef?.current) {
-        await cardRef.current.swipe(dir);
-      }
-    }
-  };
-
   // ================= ARROW KEY SUPPORT =================
 
   useEffect(() => {
@@ -89,6 +76,17 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKey);
 
   }, [currentIndex]);
+
+  const swipe = async (dir) => {
+
+    if (currentIndex >= 0) {
+      const cardRef = childRefs.current[currentIndex];
+
+      if (cardRef?.current) {
+        await cardRef.current.swipe(dir);
+      }
+    }
+  };
 
   // ================= UI =================
 
@@ -108,7 +106,6 @@ export default function Home() {
       {laserMode && (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
 
-          {/* FLASH */}
           <motion.div
             className="absolute inset-0 bg-white"
             initial={{ opacity: 0 }}
@@ -116,7 +113,6 @@ export default function Home() {
             transition={{ duration: 0.25 }}
           />
 
-          {/* UPSIDE DOWN FACE */}
           <motion.img
             src="/you.jpg"
             className="w-24 h-24 rounded-full absolute top-10 shadow-lg"
@@ -125,7 +121,6 @@ export default function Home() {
             transition={{ type: "spring", stiffness: 200 }}
           />
 
-          {/* SHOCKWAVE */}
           <motion.div
             className="w-40 h-40 border-4 border-white rounded-full"
             initial={{ scale: 0, opacity: 1 }}
@@ -133,7 +128,6 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           />
 
-          {/* PARTICLES */}
           {[...Array(25)].map((_, i) => (
             <motion.div
               key={i}
@@ -163,7 +157,7 @@ export default function Home() {
             onSwipe={(dir) => handleSwipe(dir, profile, index)}
             preventSwipe={
               profile.isYou
-                ? ["up", "down", "left"]   // ⭐ prevents rejecting YOU
+                ? ["up", "down", "left"]
                 : ["up", "down"]
             }
             className="absolute inset-0"
@@ -214,25 +208,15 @@ export default function Home() {
 
       </div>
 
-      {/* ================= BUTTONS ================= */}
+      {/* ⭐ SWIPE HINT */}
 
-      <div className="flex gap-6 mt-6">
-
-        <button
-          onClick={() => swipe("left")}
-          className="bg-red-500 text-white px-6 py-3 rounded-full shadow-lg"
-        >
-          ⬅️ Reject
-        </button>
-
-        <button
-          onClick={() => swipe("right")}
-          className="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg"
-        >
-          ❤️ Accept
-        </button>
-
-      </div>
+      <motion.p
+        animate={{ x: [-8, 8, -8] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+        className="mt-6 text-loveTeal opacity-70 text-sm"
+      >
+        ← Swipe → 
+      </motion.p>
 
     </motion.div>
   );
