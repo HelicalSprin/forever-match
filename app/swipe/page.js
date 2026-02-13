@@ -7,12 +7,14 @@ import { motion } from "framer-motion";
 import profiles from "../data/profiles";
 
 export default function Home() {
+
   const router = useRouter();
 
   const [laserMode, setLaserMode] = useState(false);
   const [laserTargetIndex, setLaserTargetIndex] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(profiles.length - 1);
   const [snapBack, setSnapBack] = useState(false);
+
+  const [currentIndex, setCurrentIndex] = useState(profiles.length - 1);
 
   const childRefs = useRef(
     Array(profiles.length)
@@ -20,51 +22,64 @@ export default function Home() {
       .map(() => React.createRef())
   );
 
+  // ================= SWIPE HANDLER =================
+
   const handleSwipe = (dir, profile, index) => {
 
-  if (profile.isYou) {
+    // ⭐ YOUR CARD LOGIC
+    if (profile.isYou) {
 
-    if (dir === "right") {
-    router.push("/success");
-    return;
-  }
+      if (dir === "right") {
+        router.push("/success");
+        return;
+      }
 
-    if (dir === "left") {
-    setSnapBack(true);
+      if (dir === "left") {
+        setSnapBack(true);
 
-    setTimeout(() => {
-      setSnapBack(false);
-    }, 600);
+        setTimeout(() => {
+          setSnapBack(false);
+        }, 500);
 
-    return;
-  }
-}
+        return;
+      }
+    }
 
+    // ⭐ WRONG RIGHT SWIPE = EXPLOSION
     if (!profile.isYou && dir === "right") {
+
       setLaserTargetIndex(index);
       setLaserMode(true);
 
       setTimeout(() => {
         setLaserMode(false);
         setCurrentIndex(index - 1);
-      }, 1200);
+      }, 900);
 
       return;
     }
 
+    // ⭐ NORMAL LEFT SWIPE
     setCurrentIndex(index - 1);
   };
 
+  // ================= BUTTON SWIPE =================
+
   const swipe = async (dir) => {
+
     if (currentIndex >= 0) {
       const cardRef = childRefs.current[currentIndex];
+
       if (cardRef?.current) {
         await cardRef.current.swipe(dir);
       }
     }
   };
 
+  // ================= ARROW KEY SUPPORT =================
+
   useEffect(() => {
+
     const handleKey = (e) => {
       if (e.key === "ArrowLeft") swipe("left");
       if (e.key === "ArrowRight") swipe("right");
@@ -72,9 +87,13 @@ export default function Home() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
+
   }, [currentIndex]);
 
+  // ================= UI =================
+
   return (
+
     <motion.div
       animate={laserMode ? { x: [-25, 25, -20, 20, -10, 10, 0] } : {}}
       transition={{ duration: 0.3 }}
@@ -85,97 +104,95 @@ export default function Home() {
         Find Your Forever Partner 💘
       </h1>
 
-      {/* CARTOON EXPLOSION OVERLAY */}
+      {/* ⭐ EXPLOSION OVERLAY */}
       {laserMode && (
-        <div className="fixed inset-0 flex flex-col items-center justify-start pointer-events-none z-50">
+        <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
 
+          {/* FLASH */}
+          <motion.div
+            className="absolute inset-0 bg-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.9, 0] }}
+            transition={{ duration: 0.25 }}
+          />
+
+          {/* UPSIDE DOWN FACE */}
           <motion.img
             src="/you.jpg"
-            className="w-24 h-24 rounded-full mt-6 shadow-lg"
+            className="w-24 h-24 rounded-full absolute top-10 shadow-lg"
             initial={{ y: -200, rotate: 180 }}
             animate={{ y: 0, rotate: 180 }}
             transition={{ type: "spring", stiffness: 200 }}
           />
 
-          {laserMode && (
-  <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+          {/* SHOCKWAVE */}
+          <motion.div
+            className="w-40 h-40 border-4 border-white rounded-full"
+            initial={{ scale: 0, opacity: 1 }}
+            animate={{ scale: 6, opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          />
 
-    {/* WHITE IMPACT FLASH */}
-    <motion.div
-      className="absolute inset-0 bg-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0.9, 0] }}
-      transition={{ duration: 0.25 }}
-    />
-
-    {/* UPSIDE DOWN FACE */}
-    <motion.img
-      src="/you.jpg"
-      className="w-24 h-24 rounded-full absolute top-10 shadow-lg"
-      initial={{ y: -200, rotate: 180 }}
-      animate={{ y: 0, rotate: 180 }}
-      transition={{ type: "spring", stiffness: 200 }}
-    />
-
-    {/* SHOCKWAVE RING */}
-    <motion.div
-      className="w-40 h-40 border-4 border-white rounded-full"
-      initial={{ scale: 0, opacity: 1 }}
-      animate={{ scale: 6, opacity: 0 }}
-      transition={{ duration: 0.6 }}
-    />
-
-    {/* DEBRIS PARTICLES */}
-    {[...Array(25)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute w-3 h-3 bg-white rounded-full"
-        initial={{ x: 0, y: 0 }}
-        animate={{
-          x: Math.random() * 500 - 250,
-          y: Math.random() * 500 - 250,
-          opacity: 0
-        }}
-        transition={{ duration: 0.8 }}
-      />
-    ))}
-
-  </div>
-)}
-
+          {/* PARTICLES */}
+          {[...Array(25)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-3 h-3 bg-white rounded-full"
+              initial={{ x: 0, y: 0 }}
+              animate={{
+                x: Math.random() * 500 - 250,
+                y: Math.random() * 500 - 250,
+                opacity: 0
+              }}
+              transition={{ duration: 0.8 }}
+            />
+          ))}
 
         </div>
       )}
 
-      {/* Card Stack */}
+      {/* ================= CARD STACK ================= */}
+
       <div className="relative w-[90vw] max-w-sm aspect-[3/4]">
 
         {[...profiles].reverse().map((profile, index) => (
+
           <TinderCard
             ref={childRefs.current[index]}
             key={profile.name}
             onSwipe={(dir) => handleSwipe(dir, profile, index)}
-            preventSwipe={["up", "down"]}
+            preventSwipe={
+              profile.isYou
+                ? ["up", "down", "left"]   // ⭐ prevents rejecting YOU
+                : ["up", "down"]
+            }
             className="absolute inset-0"
           >
 
             <motion.div
               animate={
-              laserMode && laserTargetIndex === index
-                ? {
-                    scale: [1, 1.2, 0.4],
-                    rotate: [0, -20, 45],
-                    opacity: [1, 1, 0]
-                  }
-                : snapBack && profile.isYou
-                ? {
-                    x: [-80, 40, -20, 10, 0],
-                    rotate: [-8, 4, -2, 1, 0]
-                  }
-                : { scale: 1, rotate: 0, opacity: 1 }
-            }
+                laserMode && laserTargetIndex === index
+                  ? {
+                      scale: [1, 1.2, 0.4],
+                      rotate: [0, -20, 45],
+                      opacity: [1, 1, 0]
+                    }
 
-              transition={{ duration: 0.6 ,ease: "easeOut" }}
+                  : snapBack && profile.isYou
+                  ? {
+                      x: [-120, 60, -30, 15, 0],
+                      rotate: [-12, 6, -3, 2, 0]
+                    }
+
+                  : { scale: 1, rotate: 0, opacity: 1 }
+              }
+
+              transition={{
+                duration: 0.5,
+                type: "spring",
+                stiffness: 250
+              }}
+
               className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
             >
 
@@ -192,11 +209,13 @@ export default function Home() {
             </motion.div>
 
           </TinderCard>
+
         ))}
 
       </div>
 
-      {/* Buttons */}
+      {/* ================= BUTTONS ================= */}
+
       <div className="flex gap-6 mt-6">
 
         <button
