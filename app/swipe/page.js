@@ -27,7 +27,6 @@ export default function Home() {
 
   const handleSwipe = (dir, profile, index) => {
 
-    // ⭐ LOCK USER INPUT DURING ANIMATION
     if (animationLock) return;
 
     // ⭐ YOUR CARD
@@ -40,33 +39,28 @@ export default function Home() {
 
       if (dir === "left") {
         setSnapBack(true);
-
-        setTimeout(() => {
-          setSnapBack(false);
-        }, 500);
-
+        setTimeout(() => setSnapBack(false), 500);
         return;
       }
     }
 
-    // ⭐ WRONG RIGHT SWIPE
+    // ⭐ WRONG RIGHT SWIPE → EXPLOSION
     if (!profile.isYou && dir === "right") {
 
       setAnimationLock(true);
-
       setLaserTargetIndex(index);
       setLaserMode(true);
 
       setTimeout(() => {
+
         setLaserMode(false);
         setCurrentIndex(index - 1);
 
-        // small cinematic pause
         setTimeout(() => {
           setAnimationLock(false);
-        }, 300);
+        }, 400);
 
-      }, 1100);
+      }, 4000); // ⭐ Explosion visible 4 sec
 
       return;
     }
@@ -75,7 +69,7 @@ export default function Home() {
     setCurrentIndex(index - 1);
   };
 
-  // ================= BUTTON / KEYBOARD SWIPE =================
+  // ================= PROGRAMMATIC SWIPE =================
 
   const swipe = async (dir) => {
 
@@ -83,14 +77,13 @@ export default function Home() {
 
     if (currentIndex >= 0) {
       const cardRef = childRefs.current[currentIndex];
-
       if (cardRef?.current) {
         await cardRef.current.swipe(dir);
       }
     }
   };
 
-  // ================= ARROW KEY SUPPORT =================
+  // ================= KEYBOARD SUPPORT =================
 
   useEffect(() => {
 
@@ -119,73 +112,71 @@ export default function Home() {
       </h1>
 
       {/* ⭐ EXPLOSION OVERLAY */}
-      {/* ⭐ EXPLOSION OVERLAY */}
-{laserMode && (
-  <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+      {laserMode && (
+        <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
 
-    {/* 🌑 DARK CINEMATIC FADE */}
-    <motion.div
-      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
-    />
+          {/* DARK CINEMATIC FADE */}
+          <motion.div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
 
-    {/* ⚡ WHITE IMPACT FLASH */}
-    <motion.div
-      className="absolute inset-0 bg-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0.9, 0] }}
-      transition={{ duration: 0.25 }}
-    />
+          {/* IMPACT FLASH */}
+          <motion.div
+            className="absolute inset-0 bg-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.9, 0] }}
+            transition={{ duration: 0.25 }}
+          />
 
-    {/* 👹 DEVIL DROP */}
-    <motion.img
-      src="/devil.png"
-      className="w-28 h-28 absolute top-10 drop-shadow-[0_0_25px_red]"
-      initial={{ y: -300, rotate: 180, scale: 0.6 }}
-      animate={{ y: 0, rotate: 180, scale: 1 }}
-      transition={{ type: "spring", stiffness: 250 }}
-    />
+          {/* DEVIL DROP */}
+          <motion.img
+            src="/devil.png"
+            className="w-28 h-28 absolute top-10 drop-shadow-[0_0_25px_red]"
+            initial={{ y: -300, rotate: 180, scale: 0.6 }}
+            animate={{ y: 0, rotate: 180, scale: 1 }}
+            transition={{ type: "spring", stiffness: 250 }}
+          />
 
-    {/* 💥 SHOCKWAVE RING */}
-    <motion.div
-      className="w-44 h-44 border-4 border-red-500 rounded-full"
-      initial={{ scale: 0, opacity: 1 }}
-      animate={{ scale: 7, opacity: 0 }}
-      transition={{ duration: 0.7 }}
-    />
+          {/* SHOCKWAVE */}
+          <motion.div
+            className="w-44 h-44 border-4 border-red-500 rounded-full"
+            initial={{ scale: 0, opacity: 1 }}
+            animate={{ scale: 7, opacity: 0 }}
+            transition={{ duration: 0.7 }}
+          />
 
-    {/* 💣 DEBRIS PARTICLES */}
-    {[...Array(20)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute w-3 h-3 bg-red-500 rounded-full"
-        initial={{ x: 0, y: 0 }}
-        animate={{
-          x: Math.random() * 600 - 300,
-          y: Math.random() * 600 - 300,
-          opacity: 0
-        }}
-        transition={{ duration: 0.8 }}
-      />
-    ))}
+          {/* PARTICLES */}
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-3 h-3 bg-red-500 rounded-full"
+              initial={{ x: 0, y: 0 }}
+              animate={{
+                x: Math.random() * 600 - 300,
+                y: Math.random() * 600 - 300,
+                opacity: 0
+              }}
+              transition={{ duration: 0.8 }}
+            />
+          ))}
 
-    {/* 👹 DEVIL MESSAGE CARD */}
-    <motion.div
-      initial={{ scale: 0, y: 60, opacity: 0 }}
-      animate={{ scale: 1, y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-      className="absolute bottom-24 bg-black/70 backdrop-blur-md px-6 py-4 rounded-xl shadow-2xl border border-red-500"
-    >
-      <p className="text-red-400 font-bold text-lg tracking-wide drop-shadow-[0_0_12px_red]">
-        👹 Devil destroyed the card
-      </p>
-    </motion.div>
+          {/* DEVIL MESSAGE */}
+          <motion.div
+            initial={{ scale: 0, y: 60, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+            className="absolute bottom-24 bg-black/70 backdrop-blur-md px-6 py-4 rounded-xl shadow-2xl border border-red-500"
+          >
+            <p className="text-red-400 font-bold text-lg tracking-wide drop-shadow-[0_0_12px_red]">
+              👹 Devil destroyed the card
+            </p>
+          </motion.div>
 
-  </div>
-)}
-
+        </div>
+      )}
 
       {/* ================= CARD STACK ================= */}
 
@@ -218,13 +209,11 @@ export default function Home() {
                         rotate: [0, -20, 45],
                         opacity: [1, 1, 0]
                       }
-
                     : snapBack && profile.isYou
                     ? {
                         x: [-120, 60, -30, 15, 0],
                         rotate: [-12, 6, -3, 2, 0]
                       }
-
                     : {
                         scale: isActive ? 1 : 0.92,
                         filter: isActive
@@ -232,20 +221,11 @@ export default function Home() {
                           : isNext
                           ? "blur(6px)"
                           : "blur(12px)",
-
-                        opacity: isActive
-                          ? 1
-                          : isNext
-                          ? 0.6
-                          : 0.2
+                        opacity: isActive ? 1 : isNext ? 0.6 : 0.2
                       }
                 }
 
-                transition={{
-                  duration: 0.8,
-                  ease: "easeOut"
-                }}
-
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
               >
 
@@ -267,7 +247,7 @@ export default function Home() {
 
       </div>
 
-      {/* ⭐ SWIPE HINT */}
+      {/* SWIPE HINT */}
 
       <motion.p
         animate={{ x: [-8, 8, -8] }}
