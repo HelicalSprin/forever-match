@@ -12,6 +12,7 @@ export default function Home() {
 
   const [laserMode, setLaserMode] = useState(false);
   const [laserTargetIndex, setLaserTargetIndex] = useState(null);
+  const [animationLock, setAnimationLock] = useState(false);
   const [snapBack, setSnapBack] = useState(false);
 
   const [currentIndex, setCurrentIndex] = useState(profiles.length - 1);
@@ -26,7 +27,10 @@ export default function Home() {
 
   const handleSwipe = (dir, profile, index) => {
 
-    // ⭐ YOUR CARD LOGIC
+    // ⭐ LOCK USER INPUT DURING ANIMATION
+    if (animationLock) return;
+
+    // ⭐ YOUR CARD
     if (profile.isYou) {
 
       if (dir === "right") {
@@ -45,8 +49,10 @@ export default function Home() {
       }
     }
 
-    // ⭐ WRONG RIGHT SWIPE = EXPLOSION
+    // ⭐ WRONG RIGHT SWIPE
     if (!profile.isYou && dir === "right") {
+
+      setAnimationLock(true);
 
       setLaserTargetIndex(index);
       setLaserMode(true);
@@ -54,13 +60,34 @@ export default function Home() {
       setTimeout(() => {
         setLaserMode(false);
         setCurrentIndex(index - 1);
-      }, 900);
+
+        // small cinematic pause
+        setTimeout(() => {
+          setAnimationLock(false);
+        }, 300);
+
+      }, 1100);
 
       return;
     }
 
     // ⭐ NORMAL LEFT SWIPE
     setCurrentIndex(index - 1);
+  };
+
+  // ================= BUTTON / KEYBOARD SWIPE =================
+
+  const swipe = async (dir) => {
+
+    if (animationLock) return;
+
+    if (currentIndex >= 0) {
+      const cardRef = childRefs.current[currentIndex];
+
+      if (cardRef?.current) {
+        await cardRef.current.swipe(dir);
+      }
+    }
   };
 
   // ================= ARROW KEY SUPPORT =================
@@ -75,18 +102,7 @@ export default function Home() {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
 
-  }, [currentIndex]);
-
-  const swipe = async (dir) => {
-
-    if (currentIndex >= 0) {
-      const cardRef = childRefs.current[currentIndex];
-
-      if (cardRef?.current) {
-        await cardRef.current.swipe(dir);
-      }
-    }
-  };
+  }, [currentIndex, animationLock]);
 
   // ================= UI =================
 
@@ -156,73 +172,72 @@ export default function Home() {
 
           return (
 
-          <TinderCard
-            ref={childRefs.current[index]}
-            key={profile.name}
-            onSwipe={(dir) => handleSwipe(dir, profile, index)}
-            preventSwipe={
-              profile.isYou
-                ? ["up", "down", "left"]
-                : ["up", "down"]
-            }
-            className="absolute inset-0"
-          >
+            <TinderCard
+              ref={childRefs.current[index]}
+              key={profile.name}
+              onSwipe={(dir) => handleSwipe(dir, profile, index)}
+              preventSwipe={
+                profile.isYou
+                  ? ["up", "down", "left"]
+                  : ["up", "down"]
+              }
+              className="absolute inset-0"
+            >
 
-            <motion.div
-  animate={
-    laserMode && laserTargetIndex === index
-      ? {
-          scale: [1, 1.2, 0.4],
-          rotate: [0, -20, 45],
-          opacity: [1, 1, 0]
-        }
+              <motion.div
+                animate={
+                  laserMode && laserTargetIndex === index
+                    ? {
+                        scale: [1, 1.2, 0.4],
+                        rotate: [0, -20, 45],
+                        opacity: [1, 1, 0]
+                      }
 
-      : snapBack && profile.isYou
-      ? {
-          x: [-120, 60, -30, 15, 0],
-          rotate: [-12, 6, -3, 2, 0]
-        }
+                    : snapBack && profile.isYou
+                    ? {
+                        x: [-120, 60, -30, 15, 0],
+                        rotate: [-12, 6, -3, 2, 0]
+                      }
 
-      : {
-          scale: isActive ? 1 : 0.92,   // ⭐ PREMIUM DEPTH ZOOM
-          filter: isActive
-            ? "blur(0px)"
-            : isNext
-            ? "blur(6px)"               // ⭐ SOFT NEXT CARD BLUR
-            : "blur(12px)",             // ⭐ HIDE STACK CARDS
+                    : {
+                        scale: isActive ? 1 : 0.92,
+                        filter: isActive
+                          ? "blur(0px)"
+                          : isNext
+                          ? "blur(6px)"
+                          : "blur(12px)",
 
-          opacity: isActive
-            ? 1
-            : isNext
-            ? 0.6
-            : 0.2
-        }
-  }
+                        opacity: isActive
+                          ? 1
+                          : isNext
+                          ? 0.6
+                          : 0.2
+                      }
+                }
 
-  transition={{
-    duration: 0.8,                     // ⭐ EXTRA DRAMA FADE SPEED
-    ease: "easeOut"
-  }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeOut"
+                }}
 
-  className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
->
+                className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
+              >
 
-              <img
-                src={profile.image}
-                alt={profile.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+                <img
+                  src={profile.image}
+                  alt={profile.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
 
-              <h2 className="absolute bottom-4 left-4 text-white text-2xl font-bold drop-shadow-lg">
-                {profile.name}
-              </h2>
+                <h2 className="absolute bottom-4 left-4 text-white text-2xl font-bold drop-shadow-lg">
+                  {profile.name}
+                </h2>
 
-            </motion.div>
+              </motion.div>
 
-          </TinderCard>
-            );
-            })}
-
+            </TinderCard>
+          );
+        })}
 
       </div>
 
@@ -233,7 +248,7 @@ export default function Home() {
         transition={{ repeat: Infinity, duration: 2 }}
         className="mt-6 text-loveTeal opacity-70 text-sm"
       >
-        ← Swipe → 
+        ← Swipe →
       </motion.p>
 
     </motion.div>
