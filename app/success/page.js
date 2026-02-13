@@ -121,7 +121,7 @@ export default function Success() {
   transition={{ delay: 2.3, type: "spring", stiffness: 120 }}
   className="text-6xl md:text-7xl mt-12 font-extrabold text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.9)] tracking-wide text-center"
 >
-  💖 Happy Valentine’s Day 💖
+  Happy Valentine’s Day 🌹
 </motion.h2>
 
 
