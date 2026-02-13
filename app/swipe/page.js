@@ -60,7 +60,7 @@ export default function Home() {
           setAnimationLock(false);
         }, 400);
 
-      }, 4000); // ⭐ Explosion visible 4 sec
+      }, 2000); // ⭐ Explosion visible 2 sec
 
       return;
     }
@@ -131,14 +131,44 @@ export default function Home() {
             transition={{ duration: 0.25 }}
           />
 
-          {/* DEVIL DROP */}
-          <motion.img
-            src="/devil.png"
-            className="w-28 h-28 absolute top-10 drop-shadow-[0_0_25px_red]"
-            initial={{ y: -300, rotate: 180, scale: 0.6 }}
-            animate={{ y: 0, rotate: 180, scale: 1 }}
-            transition={{ type: "spring", stiffness: 250 }}
-          />
+          {/* 👹 DEVILS FROM 4 DIRECTIONS */}
+
+{/* TOP */}
+<motion.img
+  src="/devil.png"
+  className="w-28 absolute top-0 drop-shadow-[0_0_25px_red]"
+  initial={{ y: -300, rotate: 180 }}
+  animate={{ y: 0, rotate: 180 }}
+  transition={{ type: "spring", stiffness: 220 }}
+/>
+
+{/* LEFT */}
+<motion.img
+  src="/devil.png"
+    className="w-28 absolute top-0 drop-shadow-[0_0_25px_red]"
+  initial={{ x: -300, rotate: 90 }}
+  animate={{ x: 0, rotate: 90 }}
+  transition={{ type: "spring", stiffness: 220 }}
+/>
+
+{/* RIGHT */}
+<motion.img
+  src="/devil.png"
+    className="w-28 absolute top-0 drop-shadow-[0_0_25px_red]"
+  initial={{ x: 300, rotate: -90 }}
+  animate={{ x: 0, rotate: -90 }}
+  transition={{ type: "spring", stiffness: 220 }}
+/>
+
+{/* BOTTOM */}
+<motion.img
+  src="/devil.png"
+    className="w-28 absolute top-0 drop-shadow-[0_0_25px_red]"
+  initial={{ y: 300 }}
+  animate={{ y: 0 }}
+  transition={{ type: "spring", stiffness: 220 }}
+/>
+
 
           {/* SHOCKWAVE */}
           <motion.div
@@ -165,15 +195,21 @@ export default function Home() {
 
           {/* DEVIL MESSAGE */}
           <motion.div
-            initial={{ scale: 0, y: 60, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="absolute bottom-24 bg-black/70 backdrop-blur-md px-6 py-4 rounded-xl shadow-2xl border border-red-500"
-          >
-            <p className="text-red-400 font-bold text-lg tracking-wide drop-shadow-[0_0_12px_red]">
-              👹 Devil destroyed the card
-            </p>
-          </motion.div>
+  initial={{ scale: 0, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+  className="absolute inset-0 flex items-center justify-center"
+>
+  <motion.p
+  animate={{ scale: [1, 1.1, 1] }}
+  transition={{ repeat: Infinity, duration: 1 }}
+  className="text-red-500 font-black text-5xl md:text-7xl tracking-widest drop-shadow-[0_0_20px_red] text-center"
+>
+  👹 DEVIL DESTROYED THE CARD
+</motion.p>
+
+</motion.div>
+
 
         </div>
       )}
