@@ -1,75 +1,121 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Nanum_Brush_Script } from "next/font/google";
-const brush = Nanum_Brush_Script({
-  weight: "400",
-  subsets: ["latin"],
-});
-
+import Confetti from "react-confetti";
+import { useEffect, useState } from "react";
 
 export default function Success() {
+
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  // Get screen size for confetti
+  useEffect(() => {
+    setSize({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  }, []);
+
   return (
-      <div className="relative flex flex-col items-center justify-center h-screen bg-gradient-to-br from-lovePink to-loveTeal text-white text-center p-6 overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-gradient-to-br from-lovePink via-lovePeach to-loveGold text-white text-center p-6">
 
-      {/* Floating Hearts */}
-      <motion.div
-        animate={{ y: [-20, 20, -20] }}
-        transition={{ repeat: Infinity, duration: 3 }}
-        className="absolute text-5xl top-10 left-10"
-      >
-        ❤️
-      </motion.div>
+      {/* 🎉 CONFETTI */}
+      <Confetti
+        width={size.width}
+        height={size.height}
+        numberOfPieces={350}
+        recycle={true}
+        gravity={0.15}
+      />
 
-      <motion.div
-        animate={{ y: [20, -20, 20] }}
-        transition={{ repeat: Infinity, duration: 4 }}
-        className="absolute text-5xl bottom-10 right-10"
-      >
-        💕
-      </motion.div>
+      {/* ❤️ HEART RAIN */}
+      {[...Array(25)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-3xl"
+          initial={{
+            y: -100,
+            x: Math.random() * window.innerWidth
+          }}
+          animate={{
+            y: window.innerHeight + 100
+          }}
+          transition={{
+            duration: 4 + Math.random() * 3,
+            repeat: Infinity,
+            delay: Math.random() * 2
+          }}
+        >
+          💖
+        </motion.div>
+      ))}
 
-      {/* Your Photo */}
+      {/* ✨ SPARKLES */}
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-xl"
+          initial={{
+            opacity: 0,
+            scale: 0,
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight
+          }}
+          animate={{
+            opacity: [0, 1, 0],
+            scale: [0, 1.4, 0]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            delay: Math.random() * 2
+          }}
+        >
+          ✨
+        </motion.div>
+      ))}
+
+      {/* 🌟 YOUR PHOTO */}
       <motion.img
         src="/you.jpg"
         alt="You"
-        className="w-48 h-48 rounded-full shadow-lg mb-6 object-cover"
+        className="w-52 h-52 rounded-full shadow-2xl mb-8 object-cover border-4 border-white"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.9, type: "spring" }}
       />
 
-      {/* Love Message */}
+      {/* 💓 MAIN TEXT */}
       <motion.h1
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
-        className={`${brush.className} text-5xl mb-4`}
+        className="text-5xl font-extrabold mb-4 drop-shadow-xl"
       >
         You Chose Correctly ❤️
       </motion.h1>
 
-
+      {/* 💬 MESSAGE */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="text-lg max-w-xl"
+        className="text-xl max-w-xl leading-relaxed"
       >
         Out of everyone in this world…  
         You still chose me.  
         And I promise to keep choosing you every single day.
       </motion.p>
 
+      {/* 🌹 FINAL MESSAGE */}
       <motion.h2
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 2.2 }}
-      className="text-2xl mt-8 font-semibold drop-shadow-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.3 }}
+        className="text-3xl mt-10 font-semibold drop-shadow-lg"
       >
-      Happy Valentine’s Day 🌹
+        Happy Valentine’s Day 🌹
       </motion.h2>
-
 
     </div>
   );

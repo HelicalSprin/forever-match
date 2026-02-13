@@ -270,9 +270,10 @@ export default function Home() {
                   alt={profile.name}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
+                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
 
-                <h2 className="absolute bottom-4 left-4 text-white text-2xl font-bold drop-shadow-lg">
-                  {profile.name}
+                <h2 className="absolute bottom-6 left-5 right-5 text-white text-3xl backdrop-blur-sm
+ font-extrabold tracking-wide drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">                  {profile.name}
                 </h2>
 
               </motion.div>
