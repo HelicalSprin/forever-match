@@ -15,7 +15,7 @@ export default function Welcome() {
         transition={{ duration: 0.8 }}
         className="text-4xl font-bold mb-6"
       >
-        Welcome to ForeverMatch 💘
+        Welcome to Shivi-Partner 🌻❤️
       </motion.h1>
 
       <motion.p
@@ -24,7 +24,7 @@ export default function Welcome() {
         transition={{ delay: 1 }}
         className="text-lg max-w-md mb-8"
       >
-        Today, we will find your perfect match.  
+        Today is the day Miss Adorable Shivani will find her perfect match.  
         Swipe carefully… your forever might be waiting.
       </motion.p>
 
