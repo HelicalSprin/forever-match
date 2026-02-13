@@ -163,7 +163,7 @@ export default function Home() {
 
       {/* ================= CARD STACK ================= */}
 
-      <div className="relative w-[90vw] max-w-sm aspect-[3/4]">
+      <div className="relative w-[90vw] max-w-sm aspect-3/4 touch-pan-y select-none">
 
         {[...profiles].reverse().map((profile, index) => {
 
