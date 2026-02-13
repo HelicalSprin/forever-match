@@ -1,26 +1,26 @@
 const profiles = [
 
   // FUNNY / OVER THE TOP
-  { name: "Rich Billionaire 💰", image: "/billionaire.jpg", isYou: false },
-  { name: "Movie Superstar 🎬", image: "/superstar.jpg", isYou: false },
-  { name: "Anime Husband 😎", image: "/anime.jpg", isYou: false },
-  { name: "Time Traveller ⏳", image: "/timetraveller.jpg", isYou: false },
-  { name: "Space Explorer 🚀", image: "/space.jpg", isYou: false },
+  { name: "Bruce Wayne", image: "/billionaire.jpg", isYou: false },
+  { name: "Dulquer Salmaan", image: "/superstar.jpg", isYou: false },
+  { name: "Monkey D Luffy", image: "/anime.jpg", isYou: false },
+  { name: "Actor in Dune", image: "/timetraveller.jpg", isYou: false },
+  { name: "You Cant See ME", image: "/space.jpg", isYou: false },
 
   // COOL / RELATABLE
-  { name: "Professional Gamer 🎮", image: "/gamer.jpg", isYou: false },
-  { name: "Gym Freak 💪", image: "/gym.jpg", isYou: false },
-  { name: "Chef Who Makes Maggi Daily 🍜", image: "/chef.jpg", isYou: false },
-  { name: "Cat Dad 🐈", image: "/catdad.jpg", isYou: false },
-  { name: "Food Blogger 🍕", image: "/foodblogger.jpg", isYou: false },
+  { name: "US President Donald Trump", image: "/gamer.jpg", isYou: false },
+  { name: "Pinarayi Vijayan", image: "/gym.jpg", isYou: false },
+  { name: "Cool Actor name i forgot", image: "/chef.jpg", isYou: false },
+  { name: "King Khan", image: "/catdad.jpg", isYou: false },
+  { name: "Vishruths Maddison Beer", image: "/foodblogger.jpg", isYou: false },
 
   // ROMANTIC BUILD UP
-  { name: "Poetry Writer 📖", image: "/poet.jpg", isYou: false },
-  { name: "K-Drama Hero 🇰🇷", image: "/kdrama.jpg", isYou: false },
-  { name: "Hopeless Romantic 🌹", image: "/romantic.jpg", isYou: false },
+  { name: "Pika Pika", image: "/poet.jpg", isYou: false },
+  { name: "Our Momo-Chan", image: "/kdrama.jpg", isYou: false },
+  { name: "Wah Modiji Wah", image: "/romantic.jpg", isYou: false },
 
   // FINAL PAYOFF
-  { name: "Vishruth ❤️", image: "/you.jpg", isYou: true }
+  { name: "❤️❤️ Anurudh ❤️❤️", image: "/you.jpg", isYou: true }
 
 ];
 
