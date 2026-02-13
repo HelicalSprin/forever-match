@@ -62,7 +62,7 @@ export default function Home() {
 
   return (
     <motion.div
-      animate={laserMode ? { x: [-6, 6, -6, 6, 0] } : {}}
+      animate={laserMode ? { x: [-25, 25, -20, 20, -10, 10, 0] } : {}}
       transition={{ duration: 0.3 }}
       className="flex flex-col items-center justify-center h-screen bg-lovePeach overflow-hidden"
     >
@@ -83,14 +83,52 @@ export default function Home() {
             transition={{ type: "spring", stiffness: 200 }}
           />
 
-          <motion.div
-            className="text-6xl mt-4"
-            initial={{ scale: 0 }}
-            animate={{ scale: [0, 1.4, 1] }}
-            transition={{ duration: 0.4 }}
-          >
-            💥✨💖
-          </motion.div>
+          {laserMode && (
+  <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+
+    {/* WHITE IMPACT FLASH */}
+    <motion.div
+      className="absolute inset-0 bg-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: [0.9, 0] }}
+      transition={{ duration: 0.25 }}
+    />
+
+    {/* UPSIDE DOWN FACE */}
+    <motion.img
+      src="/you.jpg"
+      className="w-24 h-24 rounded-full absolute top-10 shadow-lg"
+      initial={{ y: -200, rotate: 180 }}
+      animate={{ y: 0, rotate: 180 }}
+      transition={{ type: "spring", stiffness: 200 }}
+    />
+
+    {/* SHOCKWAVE RING */}
+    <motion.div
+      className="w-40 h-40 border-4 border-white rounded-full"
+      initial={{ scale: 0, opacity: 1 }}
+      animate={{ scale: 6, opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    />
+
+    {/* DEBRIS PARTICLES */}
+    {[...Array(25)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-3 h-3 bg-white rounded-full"
+        initial={{ x: 0, y: 0 }}
+        animate={{
+          x: Math.random() * 500 - 250,
+          y: Math.random() * 500 - 250,
+          opacity: 0
+        }}
+        transition={{ duration: 0.8 }}
+      />
+    ))}
+
+  </div>
+)}
+
 
         </div>
       )}
@@ -111,9 +149,9 @@ export default function Home() {
               animate={
                 laserMode && laserTargetIndex === index
                   ? {
-                      scale: [1, 1.05, 0.95, 1.05, 0],
-                      rotate: [0, -6, 6, -6, 25],
-                      opacity: [1, 1, 1, 1, 0]
+                      scale: [1, 1.2, 0.4],
+                      rotate: [0, -20, 45],
+                      opacity: [1, 1, 0]
                     }
                   : { scale: 1, rotate: 0, opacity: 1 }
               }
