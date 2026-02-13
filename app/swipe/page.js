@@ -12,6 +12,7 @@ export default function Home() {
   const [laserMode, setLaserMode] = useState(false);
   const [laserTargetIndex, setLaserTargetIndex] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(profiles.length - 1);
+  const [snapBack, setSnapBack] = useState(false);
 
   const childRefs = useRef(
     Array(profiles.length)
@@ -21,10 +22,23 @@ export default function Home() {
 
   const handleSwipe = (dir, profile, index) => {
 
-    if (profile.isYou && dir === "right") {
-      router.push("/success");
-      return;
-    }
+  if (profile.isYou) {
+
+    if (dir === "right") {
+    router.push("/success");
+    return;
+  }
+
+    if (dir === "left") {
+    setSnapBack(true);
+
+    setTimeout(() => {
+      setSnapBack(false);
+    }, 600);
+
+    return;
+  }
+}
 
     if (!profile.isYou && dir === "right") {
       setLaserTargetIndex(index);
@@ -147,15 +161,21 @@ export default function Home() {
 
             <motion.div
               animate={
-                laserMode && laserTargetIndex === index
-                  ? {
-                      scale: [1, 1.2, 0.4],
-                      rotate: [0, -20, 45],
-                      opacity: [1, 1, 0]
-                    }
-                  : { scale: 1, rotate: 0, opacity: 1 }
-              }
-              transition={{ duration: 0.6 }}
+              laserMode && laserTargetIndex === index
+                ? {
+                    scale: [1, 1.2, 0.4],
+                    rotate: [0, -20, 45],
+                    opacity: [1, 1, 0]
+                  }
+                : snapBack && profile.isYou
+                ? {
+                    x: [-80, 40, -20, 10, 0],
+                    rotate: [-8, 4, -2, 1, 0]
+                  }
+                : { scale: 1, rotate: 0, opacity: 1 }
+            }
+
+              transition={{ duration: 0.6 ,ease: "easeOut" }}
               className="relative w-full h-full rounded-xl shadow-lg overflow-hidden"
             >
 
