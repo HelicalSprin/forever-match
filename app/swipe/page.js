@@ -119,47 +119,73 @@ export default function Home() {
       </h1>
 
       {/* ⭐ EXPLOSION OVERLAY */}
-      {laserMode && (
-        <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+      {/* ⭐ EXPLOSION OVERLAY */}
+{laserMode && (
+  <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
 
-          <motion.div
-            className="absolute inset-0 bg-white"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0.9, 0] }}
-            transition={{ duration: 0.25 }}
-          />
+    {/* 🌑 DARK CINEMATIC FADE */}
+    <motion.div
+      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    />
 
-          <motion.img
-            src="/you.jpg"
-            className="w-24 h-24 rounded-full absolute top-10 shadow-lg"
-            initial={{ y: -200, rotate: 180 }}
-            animate={{ y: 0, rotate: 180 }}
-            transition={{ type: "spring", stiffness: 200 }}
-          />
+    {/* ⚡ WHITE IMPACT FLASH */}
+    <motion.div
+      className="absolute inset-0 bg-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: [0.9, 0] }}
+      transition={{ duration: 0.25 }}
+    />
 
-          <motion.div
-            className="w-40 h-40 border-4 border-white rounded-full"
-            initial={{ scale: 0, opacity: 1 }}
-            animate={{ scale: 6, opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          />
+    {/* 👹 DEVIL DROP */}
+    <motion.img
+      src="/devil.png"
+      className="w-28 h-28 absolute top-10 drop-shadow-[0_0_25px_red]"
+      initial={{ y: -300, rotate: 180, scale: 0.6 }}
+      animate={{ y: 0, rotate: 180, scale: 1 }}
+      transition={{ type: "spring", stiffness: 250 }}
+    />
 
-          {[...Array(25)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-3 h-3 bg-white rounded-full"
-              initial={{ x: 0, y: 0 }}
-              animate={{
-                x: Math.random() * 500 - 250,
-                y: Math.random() * 500 - 250,
-                opacity: 0
-              }}
-              transition={{ duration: 0.8 }}
-            />
-          ))}
+    {/* 💥 SHOCKWAVE RING */}
+    <motion.div
+      className="w-44 h-44 border-4 border-red-500 rounded-full"
+      initial={{ scale: 0, opacity: 1 }}
+      animate={{ scale: 7, opacity: 0 }}
+      transition={{ duration: 0.7 }}
+    />
 
-        </div>
-      )}
+    {/* 💣 DEBRIS PARTICLES */}
+    {[...Array(20)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-3 h-3 bg-red-500 rounded-full"
+        initial={{ x: 0, y: 0 }}
+        animate={{
+          x: Math.random() * 600 - 300,
+          y: Math.random() * 600 - 300,
+          opacity: 0
+        }}
+        transition={{ duration: 0.8 }}
+      />
+    ))}
+
+    {/* 👹 DEVIL MESSAGE CARD */}
+    <motion.div
+      initial={{ scale: 0, y: 60, opacity: 0 }}
+      animate={{ scale: 1, y: 0, opacity: 1 }}
+      transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+      className="absolute bottom-24 bg-black/70 backdrop-blur-md px-6 py-4 rounded-xl shadow-2xl border border-red-500"
+    >
+      <p className="text-red-400 font-bold text-lg tracking-wide drop-shadow-[0_0_12px_red]">
+        👹 Devil destroyed the card
+      </p>
+    </motion.div>
+
+  </div>
+)}
+
 
       {/* ================= CARD STACK ================= */}
 
